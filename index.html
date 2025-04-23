@@ -1,3 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-  <script src="sounds.js" type="module"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5521219086088837" crossorigin="anonymous"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WX5VS54ZDW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'G-WX5VS54ZDW');
+    </script>
+    <meta charset="UTF-8">
+    <title>Soundboard</title>
+    <script src="https://cdn.jsdelivr.net/gh/genizy/soundboard@155ea6666132bde6f7f14c413431e0fd7eaeaba9/sounds.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/gh/genizy/soundboard@main/main.js" type="module"></script>
+    <link href="https://cdn.jsdelivr.net/gh/genizy/soundboard@main/style.css" rel="stylesheet">
 </head>
+
+<body>
+    <div id="controls">
+        <button id="toggleButton" class="control-button overlap-toggle">🔇 Overlap: OFF</button>
+        <button id="stopButton" class="control-button stop-button">⏹️ Stop All Sounds</button>
+        <input id="searchInput" type="text" placeholder="Search sounds...">
+    </div>
+    <div id="soundboard"></div>
+</body>
+
+</html>
