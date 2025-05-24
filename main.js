@@ -2,10 +2,12 @@ import {
     sounds
 } from './sounds.js';
 let allowOverlap = false;
+let showFavorites = false;
 let currentAudios = [];
 const toggleButton = document.getElementById('toggleButton');
 const stopButton = document.getElementById('stopButton');
 const searchInput = document.getElementById('searchInput');
+const favoriteButton = document.getElementById('toggleFavorites')
 const soundBoard = document.getElementById('soundboard');
 toggleButton.onclick = () => {
     allowOverlap = !allowOverlap;
@@ -15,13 +17,28 @@ stopButton.onclick = () => {
     currentAudios.forEach(a => a.pause());
     currentAudios = [];
 };
+favoriteButton.onclick = () => {
+    showFavorites = !showFavorites;
+    favoriteButton.textContent = showFavorites ? '🌟 Favorites: ON' : '⭐ Favorites: OFF';
+    renderSounds(showFavorites ? "filter:favorite "+searchInput.value : searchInput.value);
+}
 
 function renderSounds(filter = '') {
     soundBoard.innerHTML = '';
-    sounds.filter(s => s.name.toLowerCase().includes(filter.toLowerCase())).forEach(sound => {
+    let finalSound;
+    if (filter.startsWith("filter:favorite ")) {
+        finalSound = (localStorage.getItem('favorites') ? JSON.parse(localStorage.getItem('favorites')) : [])
+            .filter(s => s.name.toLowerCase().includes(filter.toLowerCase().replace('filter:favorite ', '')));
+    } else {
+        finalSound = sounds.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()));
+    }
+    finalSound.forEach(sound => {
         const wrapper = document.createElement('div');
         wrapper.className = 'sound-wrapper';
         const button = document.createElement('button');
+        wrapper.addEventListener("contextmenu", (e) => {
+            rightClickPanel(e, wrapper, sound);
+        });        
         button.className = 'sound-button-img';
         button.style.setProperty('--btn-color', sound.color);
         const image = document.createElement('div');
@@ -48,5 +65,53 @@ function renderSounds(filter = '') {
 }
 renderSounds();
 searchInput.addEventListener('input', () => {
-    renderSounds(searchInput.value);
+    renderSounds((showFavorites? "filter:favorite ": "")+searchInput.value);
 });
+
+function rightClickPanel(event, button, sound) {
+    document.querySelectorAll('.right-click-panel').forEach(p => p.remove());
+
+    const panel = document.createElement('div');
+    panel.className = 'right-click-panel';
+    panel.style.setProperty('--btn-color', button.style.getPropertyValue('--btn-color'));
+    panel.style.position = 'absolute';
+    panel.style.left = `${event.pageX}px`;
+    panel.style.top = `${event.pageY}px`;
+
+    let favoriteJson = localStorage.getItem('favorites') ? JSON.parse(localStorage.getItem('favorites')) : [];
+    const favorite = document.createElement('button');
+    favorite.className = 'right-click-panel-button';
+    const isFavorite = favoriteJson.some(item => item.name === sound.name);
+    favorite.textContent = isFavorite ? '⭐ Unfavorite' : "🌟 Favorite";
+
+    favorite.onclick = () => {
+        const isFavorite = favoriteJson.some(item => item.name === sound.name);
+        if (isFavorite) {
+            favoriteJson = favoriteJson.filter(item => item.name !== sound.name);
+            if (showFavorites) {
+                renderSounds("filter:favorite "+searchInput.value);
+            }
+        } else {
+            favoriteJson.push(sound);
+        }
+        localStorage.setItem("favorites", JSON.stringify(favoriteJson));
+        panel.remove();
+    };
+    
+    
+
+    panel.appendChild(favorite);
+    document.body.appendChild(panel);
+
+    event.preventDefault();
+
+    setTimeout(() => {
+        const handleOutsideClick = (e) => {
+            if (!panel.contains(e.target)) {
+                panel.remove();
+                document.removeEventListener('click', handleOutsideClick);
+            }
+        };
+        document.addEventListener('click', handleOutsideClick);
+    }, 0);
+}
