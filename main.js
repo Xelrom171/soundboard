@@ -78,6 +78,7 @@ function rightClickPanel(event, button, sound) {
     panel.style.left = `${event.pageX}px`;
     panel.style.top = `${event.pageY}px`;
 
+    // favorite button
     let favoriteJson = localStorage.getItem('favorites') ? JSON.parse(localStorage.getItem('favorites')) : [];
     const favorite = document.createElement('button');
     favorite.className = 'right-click-panel-button';
@@ -98,9 +99,22 @@ function rightClickPanel(event, button, sound) {
         panel.remove();
     };
     
+    // download button
+    const download = document.createElement('button');
+    download.className = 'right-click-panel-button';
+    download.textContent = '💾 Download';
     
+    download.onclick = () => {
+        const link = document.createElement('a');
+        link.href = 'https://cdn.jsdelivr.net/gh/genizy/soundboard@main/'+sound.mp3;
+        link.download = sound.mp3.split("/").pop();
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     panel.appendChild(favorite);
+    panel.appendChild(download);
     document.body.appendChild(panel);
 
     event.preventDefault();
