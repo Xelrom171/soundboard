@@ -22,10 +22,6 @@ export const sounds =
     "color": "rgb(10,59,51)",
     "mp3": "media/sounds/autobots-roll-out.mp3"
   },
-        "name": "Fahhh",
-        "color": "rgb(255, 0, 0)",
-        "mp3": "/media/sounds/fahhh_KcgAXfs.mp3"
-    },
     {
         "name": "Fears to Fathom Notification Sound",
         "color": "rgb(10, 59, 51)",
