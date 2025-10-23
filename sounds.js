@@ -17,6 +17,10 @@ export const sounds =
         "color": "rgb(255, 0, 0)",
         "mp3": "/media/sounds/vine-boom.mp3"
     },
+  {
+    "name": "AUTOBOTS ROLL OUT",
+    "color": "rgb(10,59,51)",
+    "mp3": "media/sounds/autobots-roll-out.mp3"
     {
         "name": "Fahhh",
         "color": "rgb(255, 0, 0)",
